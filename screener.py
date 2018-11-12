@@ -36,6 +36,7 @@ headers = [
         'antal-aktier 5'
         ]
 
+
 def run(file_name):
     data = get_data(file_name)
     data['sum'] = 0
@@ -46,9 +47,6 @@ def run(file_name):
     data = data.sort_values('sum', ascending=False)
     print(data.head(10)['namn'])
 
-    #writer = pd.ExcelWriter('output.xlsx')
-    #data.to_excel(writer, 'Stocks', index=False)
-    #writer.close()
 
 def pick_cheap_relative_mean(data):
     country_pe = data[data['pe'] >= 6].groupby(['land'])
@@ -86,7 +84,6 @@ def pick_quality_relative_mean(data):
     d4 = data.apply(axis = 1, func = lambda x: x['omsättningstillväxt'] >= 0 and x['omsättningstillväxt'] > sector_sales_growth.get_group((x['land'], x['branch']))['omsättningstillväxt'].quantile(0.75))
     data['rq4'] = d4.astype(int)
     data['sum'] = data['sum'] + data['rq1'] + data['rq2'] + data['rq3'] + data['rq4']
-
 
 
 def pick_cheap(data):
