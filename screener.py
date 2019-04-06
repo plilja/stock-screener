@@ -35,9 +35,11 @@ headers = [
 ]
 
 
-def screen(file_name, write_output):
+def screen(file_name, write_output=True, nordic_only=False):
     data = get_data(file_name)
     data['sum'] = 0
+    if nordic_only:
+        data = pick_nordic_only(data)
     pick_quality(data)
     pick_cheap(data)
     pick_quality_relative_mean(data)
@@ -45,7 +47,11 @@ def screen(file_name, write_output):
     data = data.sort_values('sum', ascending=False)
     if write_output:
         data.head(100).to_excel('output.xlsx')
-    return data.head(20)['yahoo-ticker'].tolist()
+    return data.head(10)['yahoo-ticker'].tolist()
+
+
+def pick_nordic_only(data):
+    return data[data['land'].isin(['Sverige', 'Norge', 'Finland', 'Danmark'])]
 
 
 def pick_cheap_relative_mean(data):

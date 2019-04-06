@@ -56,26 +56,29 @@ class BorsdataApi:
                 self.yahoo_ticker_to_id[instrument.yahoo] = instrument.id
 
     def get_instrument_by_id(self, id):
-        return self.instruments[id]
+        return self.instruments.get(id)
 
-    def get_instrument_by_yahoo_ticker(self, yahoo_ticker):
-        return self.get_instrument_by_id(self.yahoo_ticker_to_id[yahoo_ticker])
+    def get_instrument_by_yahoo(self, yahoo_ticker):
+        id = self.yahoo_ticker_to_id.get(yahoo_ticker)
+        return self.get_instrument_by_id(id)
 
 
 if __name__ == '__main__':
-    b = BorsdataApi()
-    assert(b.get_instrument_by_yahoo_ticker('ABB.ST').id == 3)
-    assert(b.get_instrument_by_yahoo_ticker('ABB.ST').name == 'ABB')
-    assert(b.get_instrument_by_yahoo_ticker('ABB.ST').country == 'SE')
-    assert(b.get_instrument_by_yahoo_ticker('ABB.ST').isin == 'CH0012221716')
     weekend_day = datetime.date(2017, 10, 1)
     business_day = datetime.date(2017, 10, 2)
-    assert(b.get_instrument_by_yahoo_ticker('ABB.ST').get_price(weekend_day) == 201.6)
-    assert(b.get_instrument_by_yahoo_ticker('ABB.ST').get_price(business_day) == 202.9)
-    assert(b.get_instrument_by_yahoo_ticker('ORK.OL').id == 944)
-    assert(b.get_instrument_by_yahoo_ticker('ORK.OL').name == 'Orkla')
-    assert(b.get_instrument_by_yahoo_ticker('ORK.OL').country == 'NO')
-    assert(b.get_instrument_by_yahoo_ticker('ORK.OL').isin == 'NO0003733800')
-    assert(b.get_instrument_by_yahoo_ticker('ORK.OL').get_price(weekend_day) == 81.7)
-    assert(b.get_instrument_by_yahoo_ticker('ORK.OL').get_price(business_day) == 82.25)
+    b = BorsdataApi()
+
+    assert(b.get_instrument_by_yahoo('ABB.ST').id == 3)
+    assert(b.get_instrument_by_yahoo('ABB.ST').name == 'ABB')
+    assert(b.get_instrument_by_yahoo('ABB.ST').country == 'SE')
+    assert(b.get_instrument_by_yahoo('ABB.ST').isin == 'CH0012221716')
+    assert(b.get_instrument_by_yahoo('ABB.ST').get_price(weekend_day) == 201.6)
+    assert(b.get_instrument_by_yahoo('ABB.ST').get_price(business_day) == 202.9)
+
+    assert(b.get_instrument_by_yahoo('ORK.OL').id == 944)
+    assert(b.get_instrument_by_yahoo('ORK.OL').name == 'Orkla')
+    assert(b.get_instrument_by_yahoo('ORK.OL').country == 'NO')
+    assert(b.get_instrument_by_yahoo('ORK.OL').isin == 'NO0003733800')
+    assert(b.get_instrument_by_yahoo('ORK.OL').get_price(weekend_day) == 81.7)
+    assert(b.get_instrument_by_yahoo('ORK.OL').get_price(business_day) == 82.25)
 

@@ -11,11 +11,11 @@ def run(file_name, backtest, runimport):
     if not any([file_name, backtest, runimport]):
         print('Need to some arguments')
         return
-    if file_name:
-        picks = screener.screen(file_name, True)
+    if not backtest and file_name:
+        picks = screener.screen(file_name)
         print(picks)
-    if backtest:
-        bt.run_backtest()
+    if backtest and file_name:
+        bt.run_backtest_on_file(file_name)
 
 
 if __name__ == '__main__':
