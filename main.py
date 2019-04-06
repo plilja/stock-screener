@@ -15,7 +15,7 @@ def run(file_name, backtest, runimport):
         picks = screener.screen(file_name, True)
         print(picks)
     if backtest:
-        bt.runbacktest()
+        bt.run_backtest()
 
 
 if __name__ == '__main__':
