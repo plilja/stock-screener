@@ -2,28 +2,27 @@ import re
 import datetime
 import os
 import logging
-import screener
 from borsdata_api import BorsdataApi
 
 
-def run_backtest():
+def run_backtest(screener_algo):
     folder = __file__.replace('backtest.py', '')
     run_backtest_in_folder(folder + '/data/')
 
 
-def run_backtest_in_folder(data_dir):
+def run_backtest_in_folder(data_dir, screener_algo):
     for f in os.listdir(data_dir):
         if f[-5:] == '.xlsx':
-            run_backtest_on_file(f)
+            run_backtest_on_file(f, screener_algo)
 
 
-def run_backtest_on_file(file_name):
+def run_backtest_on_file(file_name, screener_algo):
     date = get_date_from_file_name(file_name)
     today = datetime.date.today()
     if not date:
         logging.warning("Can't run backtest on file with name %s, skipping" % file_name)
         return
-    picks = screener.screen(file_name, False, True)
+    picks = screener_algo(file_name, False, True)
     borsdata = BorsdataApi()
     acc = 0
     count = 0
