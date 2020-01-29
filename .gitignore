@@ -110,3 +110,5 @@ venv.bak/
 # You need to download this yourself with your own API-key
 # I would violate the Borsdata TOS if I included it in the repo.
 borsdata_protected/
+trends/
+data/
