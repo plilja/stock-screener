@@ -37,12 +37,13 @@ def trends(file_name):
 
 def trends_per_interval(data, grouping, span):
     data = data.drop(data[data[span].isnull()].index)
-    aggregated = data.groupby(grouping)[span].aggregate(['mean', np.median, 'count'])
+    aggregated = data.groupby(grouping)[span].aggregate(['mean', np.median, 'std', 'count'])
     aggregated = aggregated.sort_values('median', ascending=False)
     aggregated = aggregated.head(10)
     output = aggregated.to_string(formatters={
         'mean': '{:.0%}'.format,
-        'median': '{:.0%}'.format
+        'median': '{:.0%}'.format,
+        'std': '{:.0%}'.format
     })
     print(span)
     print(output)
