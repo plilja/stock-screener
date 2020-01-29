@@ -25,14 +25,24 @@ def trends(file_name):
     data = get_data(file_name)
     data = filter_swedish(data)
     data = filter_stocks(data)
-    print('Overview')
-    trends_per_interval(data, ['sector'], '1m')
-    trends_per_interval(data, ['sector'], '3m')
-    trends_per_interval(data, ['sector'], '6m')
+    print('Sector overview')
+    t1 = trends_per_interval(data, ['sector'], '1m')
+    t2 = trends_per_interval(data, ['sector'], '3m')
+    t3 = trends_per_interval(data, ['sector'], '6m')
     print('Industry details')
-    trends_per_interval(data, ['sector', 'industry'], '1m')
-    trends_per_interval(data, ['sector', 'industry'], '3m')
-    trends_per_interval(data, ['sector', 'industry'], '6m')
+    td1 = trends_per_interval(data, ['sector', 'industry'], '1m')
+    td2 = trends_per_interval(data, ['sector', 'industry'], '3m')
+    td3 = trends_per_interval(data, ['sector', 'industry'], '6m')
+    print('Sectors trending over all intervals')
+    print('-----------------------------------')
+    for sector in sorted(t1 | t2 | t3):
+        print(sector)
+    print()
+    print()
+    print('Industries trending over all intervals')
+    print('--------------------------------------')
+    for industry in sorted(td1 & td2 & td3):
+        print('  -  '.join(industry))
 
 
 def trends_per_interval(data, grouping, span):
@@ -46,9 +56,11 @@ def trends_per_interval(data, grouping, span):
         'std': '{:.0%}'.format
     })
     print(span)
+    print('-'*len(span))
     print(output)
     print()
     print()
+    return set(aggregated.index.values)
 
 
 def filter_swedish(data):
