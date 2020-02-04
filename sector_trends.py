@@ -35,7 +35,7 @@ def trends(file_name):
     td3 = trends_per_interval(data, ['sector', 'industry'], '6m')
     print('Sectors trending over all intervals')
     print('-----------------------------------')
-    for sector in sorted(t1 | t2 | t3):
+    for sector in sorted(t1 & t2 & t3):
         print(sector)
     print()
     print()
@@ -48,6 +48,9 @@ def trends(file_name):
 def trends_per_interval(data, grouping, span):
     data = data.drop(data[data[span].isnull()].index)
     aggregated = data.groupby(grouping)[span].aggregate(['mean', np.median, 'std', 'count'])
+    aggregated = aggregated[aggregated['count'] > 8]
+    aggregated = aggregated[aggregated['median'] > 0]
+    aggregated = aggregated[aggregated['mean'] > 0]
     aggregated = aggregated.sort_values('median', ascending=False)
     aggregated = aggregated.head(10)
     output = aggregated.to_string(formatters={
